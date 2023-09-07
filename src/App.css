@@ -1,0 +1,11 @@
+.App {
+  text-align: center;
+  padding: 4rem;
+}
+
+.article {
+  border: 1px solid black;
+  margin: 1rem;
+  padding-left: 1rem;
+  text-align: left;
+}
