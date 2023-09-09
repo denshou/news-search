@@ -1,18 +1,17 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import Loading from "./components/Loading";
-import ArticleModal from "./components/ArticleModal";
+import { useInView } from "react-intersection-observer";
 
 function App() {
   const [articles, setArticles] = useState([]);
   const [topic, setTopic] = useState("");
   const [from, setFrom] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalId, setModalId] = useState(null);
+  const [page, setPage] = useState(1);
 
   const [url, setUrl] = useState(
-    "https://newsapi.org/v2/everything?q=tesla&from=2023-08-08&sortBy=publishedAt&apiKey=5ff16da1c98c4f08aa5dcdb903ad4df1"
+    "https://newsapi.org/v2/top-headlines?country=kr&page=1&apiKey=94b00823b790482094d652f6cd3b55b2"
   );
 
   useEffect(() => {
@@ -43,11 +42,11 @@ function App() {
       return;
     }
     setUrl(
-      `https://newsapi.org/v2/everything?q=${topic}&from=${from}&to=${from}&sortBy=publishedAt&apiKey=5ff16da1c98c4f08aa5dcdb903ad4df1`
+      `https://newsapi.org/v2/everything?q=${topic}&from=${from}&to=${from}&page=${page}&sortBy=publishedAt&apiKey=5ff16da1c98c4f08aa5dcdb903ad4df1`
     );
   };
 
-  const viewDetails = () => {};
+  console.log(articles);
   return (
     <>
       {isLoading && <Loading />}
@@ -64,28 +63,23 @@ function App() {
           <button type="submit">검색</button>
         </form>
 
-        {
-          isOpen && <ArticleModal articles={articles} modalId={modalId} isOpen={isOpen} setIsOpen={setIsOpen}/>
-          // <div>{articles[modalId].title}</div>
-         
-        }
-
-        <div>
+        <div className="scroll-box">
           {articles.map((article, index) => (
             <div
               className="article"
               key={Math.random()}
               id={index}
               onClick={(event) => {
-                article.source.id = index;
-                // console.log(article);
-                setIsOpen(true);
-
-                setModalId(event.target.id);
+                window.open(article.url);
               }}
             >
-              <p id={index}>{article.title}</p>
-              <p id={index}>{article.description}</p>
+              <div className="imgdiv">
+                <img src={article.urlToImage} alt="img" />
+              </div>
+              <div className="text">
+                <h2 id={index}>{article.title}</h2>
+                <p id={index}>{article.description}</p>
+              </div>
             </div>
           ))}
         </div>

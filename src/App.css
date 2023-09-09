@@ -3,10 +3,33 @@
   padding: 4rem;
 }
 
-.article {
+.scroll-box{
+  margin-top: 5rem;
   border: 1px solid black;
-  margin: 1rem;
+  height: 61rem;
+  overflow-y: scroll;
+  overflow-x: hidden
+}
+
+.article {
+  /* border: 1px solid black; */
+  margin: 2rem;
   padding-left: 1rem;
   text-align: left;
   cursor: pointer;
+  display: flex;
+}
+.imgdiv{
+  width: 10rem;
+  height: 10rem;
+  
+
+}
+img {
+  width: 10rem;
+  height: 10rem;
+  object-fit: cover;
+}
+.text{
+  margin-left: 1rem;
 }
