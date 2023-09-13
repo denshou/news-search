@@ -1,20 +1,28 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import "./MainHeader.css"
+import { styled } from "styled-components";
 
 const MainHeader = () => {
   return (
     <header>
-      <nav>
-        <div className="nav-link">
-        <NavLink to="/search">뉴스 검색</NavLink>
-        </div>
-        <div className="nav-link">
-        <NavLink to="/like">좋아요</NavLink>
-        </div>
-      </nav>
+      <Nav>
+        <NavDiv>
+          <NavLink to="/search">뉴스 검색</NavLink>
+        </NavDiv>
+        <NavDiv>
+          <NavLink to="/like">좋아요</NavLink>
+        </NavDiv>
+      </Nav>
     </header>
   );
 };
 
 export default MainHeader;
+
+const Nav = styled.div`
+  display: flex;
+`;
+const NavDiv = styled.div`
+  margin: 2rem;
+`;
+const NavStyle = styled(NavLink)``;

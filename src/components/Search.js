@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import Loading from "./Loading";
+import { styled } from "styled-components";
 
 const Search = () => {
   const [articles, setArticles] = useState([]);
@@ -64,8 +65,6 @@ const Search = () => {
   };
 
   const plusButtonHandler = (article) => {
-    console.log(article);
-
     const postHandler = async () => {
       await fetch(
         "https://react-practice-fdff6-default-rtdb.asia-southeast1.firebasedatabase.app/like.json",
@@ -83,7 +82,7 @@ const Search = () => {
   return (
     <>
       {isLoading && <Loading />}
-      <div className="App">
+      <SearchPage>
         <form className="search" onSubmit={submitHandler}>
           <input type="text" value={topic || ""} onChange={inputChange} />
           <input
@@ -96,39 +95,85 @@ const Search = () => {
           <button type="submit">검색</button>
         </form>
 
-        <div className="scroll-box">
+        <ScrollBox>
           {articles.map((article, index) => (
-            <div className="article-box" key={Math.random()}>
-              {/* <button className="like-btn unclicked"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"/></svg></button>
-                <button className="like-btn clicked"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/></svg></button> */}
-              <button
+            <ArticleBox key={Math.random()}>
+              <LikeBtn
                 key={index}
                 className="like-btn plus"
                 onClick={() => plusButtonHandler(article)}
-              ></button>
-              <div
-                className="article"
-                
+              ></LikeBtn>
+              <Article
                 id={index}
                 onClick={(event) => {
                   window.open(article.url);
                 }}
               >
-                <div className="imgdiv">
-                  <img src={article.urlToImage} alt="img" />
-                </div>
-                <div className="text">
+                <ImgDiv>
+                  <Img src={article.urlToImage} alt="img" />
+                </ImgDiv>
+                <Text>
                   <h2 id={index}>{article.title}</h2>
                   <p id={index}>{article.description}</p>
-                </div>
-              </div>
-            </div>
+                </Text>
+              </Article>
+            </ArticleBox>
           ))}
           <div ref={ref}></div>
-        </div>
-      </div>
+        </ScrollBox>
+      </SearchPage>
     </>
   );
 };
 
 export default Search;
+
+const SearchPage = styled.div`
+  text-align: center;
+  padding: 4rem;
+`;
+const ScrollBox = styled.div`
+  margin: 5rem 0 0 0;
+  border: 1px solid black;
+  height: 61rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+`;
+const ArticleBox = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+`;
+const LikeBtn = styled.button`
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24'%3E%3Cpath d='M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z'/%3E%3C/svg%3E")
+    no-repeat;
+  &:hover {
+    opacity: 0.6;
+  }
+`;
+const Article = styled.div`
+  margin: 2rem 2rem 2rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+`;
+const ImgDiv = styled.div`
+  width: 10rem;
+  height: 10rem;
+`;
+const Img = styled.img`
+  width: 10rem;
+  height: 10rem;
+  object-fit: cover;
+`;
+const Text = styled.div`
+  margin-left: 1rem;
+`;
