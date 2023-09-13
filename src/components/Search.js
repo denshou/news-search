@@ -2,27 +2,36 @@ import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import Loading from "./Loading";
 import { styled } from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { loadingActions } from "../store/loadingSlice";
 
 const Search = () => {
   const [articles, setArticles] = useState([]);
   const [topic, setTopic] = useState("tesla");
-  const [from, setFrom] = useState("2023-09-09");
-  const [isLoading, setIsLoading] = useState(false);
+  const [from, setFrom] = useState("2023-09-12");
+
+  // const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [ref, inView] = useInView();
+
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.isLoading);
+  const switchLoad = () => {
+    dispatch(loadingActions.switchLoading());
+  };
 
   const [url, setUrl] = useState(
     `https://newsapi.org/v2/everything?q=${topic}&from=${from}&pageSize=10&page=${page}&sortBy=publishedAt&apiKey=3ff5a28debea4f11892ef4dd34f978bf`
   );
 
   const fetchData = async () => {
-    setIsLoading(true);
+    switchLoad();
     try {
       await fetch(url)
         .then((res) => res.json())
         .then((data) => setArticles([...articles, ...data.articles]));
 
-      setIsLoading(false);
+      switchLoad();
     } catch (error) {
       window.alert(error);
     }

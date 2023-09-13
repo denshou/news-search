@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Loading from "./Loading";
 import { styled } from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { loadingActions } from "../store/loadingSlice";
 
 const Like = () => {
   const [likes, setLikes] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.isLoading);
+  const switchLoad = () => {
+    dispatch(loadingActions.switchLoading());
+  };
 
   const removeButtonHandler = async (id) => {
     console.log(id);
     await fetch(
-      `https://react-practice-fdff6-default-rtdb.asia-southeast1.firebasedatabase.app/like.json/${id}`,
+      `https://react-practice-fdff6-default-rtdb.asia-southeast1.firebasedatabase.app/like.json`,
       {
         method: "DELETE",
         headers: {
@@ -21,7 +28,7 @@ const Like = () => {
 
   const getLike = async () => {
     try {
-      setIsLoading(true);
+      switchLoad();
       const response = await fetch(
         "https://react-practice-fdff6-default-rtdb.asia-southeast1.firebasedatabase.app/like.json",
         {
@@ -41,7 +48,7 @@ const Like = () => {
         likeArray.push(newObj);
       }
       setLikes(likeArray);
-      setIsLoading(false);
+      switchLoad();
     } catch (error) {}
   };
 
@@ -121,10 +128,10 @@ const ImgDiv = styled.div`
   height: 10rem;
 `;
 const Img = styled.img`
-width: 10rem;
-height: 10rem;
-object-fit: cover;
-`
+  width: 10rem;
+  height: 10rem;
+  object-fit: cover;
+`;
 const Text = styled.div`
   margin-left: 1rem;
 `;
